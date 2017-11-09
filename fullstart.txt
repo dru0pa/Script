@@ -1,0 +1,19 @@
+#!/bin/bash
+
+# This script will only keep result for ping able devices
+
+# Writen by Andrew.Price@za.didata.com
+
+echo start ping
+/bin/bash /tmp/ping/pings_smarts.sh
+
+echo start strip
+/bin/bash /tmp/ping/strip_smarts.sh
+
+
+
+echo start ping
+/bin/bash /tmp/ping/ping_w4n.sh
+
+echo start strip
+/bin/bash /tmp/ping/strip_w4n.sh

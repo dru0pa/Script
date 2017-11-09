@@ -1,0 +1,3 @@
+# To export the Interface and Port file weekly
+0 8 * * 1 root /root/scripts/update-script/GetObjectManagementStatus-backup.sh
+

@@ -1,0 +1,46 @@
+#!/bin/bash
+# created by Andrew Price
+# Backup files for upgrade
+for i in `cat /opt/scripts/AndrewCDMcaps`
+do
+#
+#starting
+echo "starting $i"
+#
+#create diretory
+mkdir /opt/backup/RIM.9.2.3.4/$i
+#
+#BACKUP CURRENT
+#rim-crontab 
+rsync -a -e ssh $i:/etc/cron.d/rim-crontab /opt/backup/RIM9.2.3.4/$i/rim-crontab_$(date +%Y-%m-%d).back
+echo "done $i rim-crontab"
+#
+#snmp-polling-distribution.xml
+rsync -a -e ssh $i:/opt/APG/Collecting/SNMP-Collector/Default/conf/snmp-polling-distribution.xml /opt/backup/RIM9.2.3.4/$i/snmp-polling-distribution.xml_$(date +%Y-%m-%d).back
+echo "done $i snmp-polling-distribution.xml"
+#
+#backend-socketconnector.xml
+rsync -a -e ssh $i:/opt/APG/Collecting/Collector-Manager/Default/conf/backend-socketconnector.xml /opt/backup/RIM9.2.3.4/$i/backend-socketconnector.xml_$(date +%Y-%m-%d).back
+echo "done $i backend-socketconnector.xml"
+#
+#collecting.xml
+rsync -a -e ssh $i:/opt/APG/Collecting/Collector-Manager/Default/conf/collecting.xml /opt/backup/RIM9.2.3.4/$i/collecting.xml_$(date +%Y-%m-%d).back
+echo "done $i collecting.xml"
+#
+#users 
+rsync -a -e ssh $i:/opt/APG/Tools/Webservice-Gateway/Default/conf/users /opt/backup/RIM9.2.3.4/$i/users_$(date +%Y-%m-%d).back
+echo "done $i users "
+#
+#remove atrpms.sh
+ssh $i rm -rf /etc/profile.d/atrpms.sh
+echo "done $i remove atrpms.sh"
+#
+#change user
+sed 's/changeme/gsoa4ever/' /opt/backup/RIM9.2.3.4/gp-labsystem/users_$(date +%Y-%m-%d).back
+echo "done $i change password"
+#
+#enabled="false" name="XMLCollector-Juniper"
+mv /opt/backup/RIM9.2.3.4/$i/collecting.xml_2014-07-18.back /opt/backup/RIM9.2.3.4/$i/collecting.xml_2014-07-18.back.false
+sed 's/enabled="false" name="XMLCollector-Juniper"/enabled="true" name="XMLCollector-Juniper"/' /opt/backup/RIM9.2.3.4/$i/collecting.xml_2014-07-18.back.false > /opt/backup/RIM9.2.3.4/$i/collecting.xml_2014-07-18.back
+echo "done $i change XMLCollector-Juniper to true"
+echo "finished $i"

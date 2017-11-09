@@ -1,0 +1,17 @@
+#!/bin/bash
+
+# This script is to clean up date
+
+# Writen by Andrew.Price@za.didata.com
+
+echo greping ping
+cat /tmp/ping/ip_log_results_smarts | grep PING > /tmp/ping/strip_results_smarts
+
+echo cutting first 2 words
+cut -d' ' -f3- /tmp/ping/strip_results_smarts > /tmp/ping/cut_results_smarts
+
+echo greping frist word
+grep -Eo '^[^ ]+' /tmp/ping/cut_results_smarts > /tmp/ping/grep_results_smarts
+
+echo cutting first and last charter
+rev /tmp/ping/grep_results | cut -c2- | rev | cut -c2- > /tmp/ping/final_results_smarts
